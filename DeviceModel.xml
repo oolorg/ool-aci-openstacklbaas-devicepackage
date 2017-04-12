@@ -1,0 +1,237 @@
+<?xml version="1.0"?>
+
+<polUni>
+    <infraInfra>
+        <vnsMDev vendor="lbaas" model="lbaas" version="0.1" funcMask="GoTo">
+
+            <!-- - - - - - - - - - - - - - - - - - - - - -->
+            <!--              GENERIC PART               -->
+            <!-- - - - - - - - - - - - - - - - - - - - - -->
+
+            <!-- Script -->
+            <vnsDevScript name="lbaas"
+                          ctrlrVersion="1.0"
+                          minorversion="2"
+                          versionExpr="0.1"
+                          packageName="DeviceScript.py"/>
+
+            <vnsDevProf name="lbaas" type="VIRTUAL">
+                <vnsDevInt name="eth0"/>
+                <vnsDevInt name="eth1"/>
+                <vnsDevInt name="eth2"/>
+            </vnsDevProf>
+
+            <!-- Credentials -->
+            <vnsMCred name="username" key="username"/>
+            <vnsMCredSecret name="password" key="password"/>
+
+            <!-- Interfaces -->
+            <vnsMIfLbl name="external" shortName="ext"/>
+            <vnsMIfLbl name="internal" shortName="int"/>
+            <vnsMIfLbl name="management" shortName="mgmt"/>
+
+            <!-- Parameter validation -->
+            <vnsComparison name="isIPv4Addr" cmp="match" value="\d*\.\d*\.\d*\.\d*"/>
+
+            <vnsComposite comp="or" name="isLBAlgo">
+                <vnsComparison cmp="eq" name="round-robin" value="round-robin"/>
+                <vnsComparison cmp="eq" name="least-con" value="least-con"/>
+                <vnsComparison cmp="eq" name="least-time" value="least-time"/>
+                <vnsComparison cmp="eq" name="ip_hash" value="ip_hash"/>
+                <vnsComparison cmp="eq" name="hash" value="hash"/>
+            </vnsComposite>
+
+            <vnsComposite comp="or" name="isBoolean">
+                <vnsComparison cmp="match" name="true" value="true"/>
+                <vnsComparison cmp="match" name="false" value="false"/>
+            </vnsComposite>
+
+            <!-- More details on the 'modifier': http://lbaas.org/en/docs/http/ngx_http_core_module.html#location -->
+            <vnsComposite comp="or" name="isModifier">
+                <vnsComparison cmp="eq" name="eq" value="="/> <!-- Exact match -->
+                <vnsComparison cmp="eq" name="CIregex" value="~*"/> <!-- Case insensitive regex -->
+                <vnsComparison cmp="eq" name="CSregex" value="~"/> <!-- Case sensitive regex -->
+                <vnsComparison cmp="eq" name="not_check" value="^~"/> <!-- Regex is not checked -->
+            </vnsComposite>
+
+            <vnsComposite comp="or" name="isPassMethod">
+                <vnsComparison cmp="eq" name="proxy_pass" value="proxy_pass"/>
+                <vnsComparison cmp="eq" name="fastcgi_pass" value="fastcgi_pass"/>
+                <vnsComparison cmp="eq" name="uwsgi_pass" value="uwsgi_pass"/>
+                <vnsComparison cmp="eq" name="scgi_pass" value="scgi_pass"/>
+                <vnsComparison cmp="eq" name="memcached_pass" value="memcached_pass"/>
+            </vnsComposite>
+
+            <!-- Errors -->
+            <vnsMDfcts>
+                <vnsMDfct code="10"
+                          descr="Agent not reachable"
+                          recAct="Check that the Agent is running at the correct address and port on the device (REST call failed).">
+                    <vnsRsDfctToCat tDn="dfctCats/dfctCat-major"/>
+                </vnsMDfct>
+
+                <vnsMDfct code="20"
+                          descr="Device not reachable"
+                          recAct="Check that the device is running at the correct address and port (ping failed).">
+                    <vnsRsDfctToCat tDn="dfctCats/dfctCat-major"/>
+                </vnsMDfct>
+            </vnsMDfcts>
+
+
+            <!-- - - - - - - - - - - - - - - - - - - - - -->
+            <!--  CLUSTER AND DEVICE CONFIGURATION PART  -->
+            <!-- - - - - - - - - - - - - - - - - - - - - -->
+
+            <vnsClusterCfg name="ClusterConfig">
+                <vnsDevCfg name="DeviceConfig">
+
+                </vnsDevCfg>
+            </vnsClusterCfg>
+
+
+            <!-- - - - - - - - - - - - - - - - - - - - - -->
+            <!--             FUNCTIONAL PART             -->
+            <!-- - - - - - - - - - - - - - - - - - - - - -->
+
+            <!-- Global functional device configuration -->
+            <vnsMDevCfg name="DeviceConfig">
+
+                <!-- Server pool (backend) -->
+                <!--<vnsMFolder key="upstream"
+                            description="Configure the backend (upstream)"
+                            dispLabel="Backend"
+                            cardinality="n">
+
+                    <vnsMParam key="upstreamName" description="Name of the backend" mandatory="true" dType="str" dispLabel="Name"/>
+
+                    <vnsMParam key="lbalgo" description="Load-balancing algorithm" mandatory="false" dType="str" dispLabel="Load-balancing algorithm" validation="isLBAlgo"/>
+
+                    <vnsMFolder key="server"
+                                description="Server of a backend"
+                                dispLabel="Server"
+                                cardinality="n">
+                -->
+                        <!-- Connectivity -->
+                <!--
+                        <vnsMParam key="ip" description="Address of the server" mandatory="true" dType="str" dispLabel="Address"/>
+                        <vnsMParam key="port" description="Port of the server" mandatory="false" dType="str" dispLabel="Port"/>
+                -->
+
+                        <!-- Parameters -->
+                <!--
+                        <vnsMParam key="weight" description="Weight given to the server" mandatory="false" dType="str" dispLabel="Weight"/>
+                        <vnsMParam key="max_fails" description="Maximum number of unsuccessful attempts during fail_timeout" mandatory="false" dType="str" dispLabel="max_fails"/>
+                        <vnsMParam key="fail_timeout" description="Consider the server unavailable if max_fails is reached during this time" mandatory="false" dType="str" dispLabel="fail_timeout"/>
+                        <vnsMParam key="backup" description="Mark the server as a backup" mandatory="false" dType="str" dispLabel="backup" validation="isBoolean"/>
+                -->
+                        <!-- TODO : Continue the list of parameters : http://lbaas.org/en/docs/http/ngx_http_upstream_module.html#server -->
+
+                    <!--</vnsMFolder>
+                </vnsMFolder>-->
+                <!-- Frontend server Load Balancer -->
+                <!--
+                <vnsMFolder key="frontendServer"
+                            description="Configure the frontend server"
+                            dispLabel="Frontend"
+                            cardinality="n">
+                -->
+                    <!--scopedBy="epg"-->
+
+                    <!-- Listen directive -->
+                    <!-- See http://lbaas.org/en/docs/http/ngx_http_core_module.html#listen -->
+
+                    
+                <vnsMFolder key="OpenstackConfig"
+                            description="Listen directive"
+                            dispLabel="Listen"
+                            cardinality="1">
+                    
+                        <vnsMParam key="opIp" description="Address" mandatory="false" dType="str" dispLabel="OpenstackAddress"/> <!-- Not mandatory, default : *, example: *:80 -->
+                        <vnsMParam key="opUser" description="Openstack Login Username" mandatory="false" dType="str" dispLabel="LoginUsername"/>
+                        <vnsMParam key="opPassword" description="Openstack Login Password" mandatory="false" dType="str" dispLabel="LoginPassword"/>
+                        <vnsMParam key="poolName" description="Lbaas Pool Name" mandatory="false" dType="str" dispLabel="PoolName"/>
+                        <vnsMParam key="vipName" description="Lbaas VIP Name" mandatory="false" dType="str" dispLabel="VIPName"/>
+                        <vnsMParam key="subnetName" description="Target Subnet Name" mandatory="false" dType="str" dispLabel="SubnetName"/>
+                        <!--<vnsMParam key="isDefault" description="Is the default server" mandatory="false" dType="str" dispLabel="Default (True/False)" validation="isBoolean"/>-->
+                </vnsMFolder>
+
+
+                    <!-- Location -->
+                    <!-- "location [= | ~ | ~* | $~] uri {...}", see http://lbaas.org/en/docs/http/ngx_http_core_module.html#location -->
+                    <!--
+                    <vnsMFolder key="location"
+                                description="Location"
+                                dispLabel="Location"
+                                cardinality="n">
+                        <vnsMParam key="uri" description="URI" mandatory="true" dType="str" dispLabel="URI"/>
+                        <vnsMParam key="modifier" description="Modifier" mandatory="false" dType="str" dispLabel="Modifier" validation="isModifier"/>
+
+                        <vnsMParam key="backend_name" description="Name of the backend" mandatory="true" dType="str" dispLabel="Backend name"/>
+                        <vnsMParam key="pass_method" description="Pass method (default: proxy_pass)" mandatory="false" dType="str" dispLabel="Pass method" validation="isPassMethod"/>
+                        <vnsMParam key="https" description="Is the protocol HTTPS ?" mandatory="false" dType="str" dispLabel="HTTPS (True/False)" validation="isBoolean"/>
+                    </vnsMFolder>
+                    -->
+
+                <!--</vnsMFolder>-->
+
+            </vnsMDevCfg>
+
+
+            <!-- Group configuration -->
+            <!--<vnsGrpCfg>-->
+                <!-- No group configuration -->
+            <!--</vnsGrpCfg>-->
+
+
+            <!-- Function configuration : Load balancer -->
+            <vnsMFunc name="LoadBalancer">
+
+                <!-- Image -->
+                <vnsMImage name="lbaas.gif"/>
+
+                <!-- Connector Objects -->
+                <vnsMConn name="internal" encType="vlan" dir="output" epNotifications="endpoint">
+                    <vnsRsInterface tDn="uni/infra/mDev-lbaas-lbaas-0.1/mIfLbl-internal"/>
+                </vnsMConn>
+
+                <vnsMConn name="external" encType="vlan" dir="input" epNotifications="endpoint">
+                    <vnsRsInterface tDn="uni/infra/mDev-lbaas-lbaas-0.1/mIfLbl-external"/>
+                </vnsMConn>
+
+                <!-- Features -->
+                <!--<vnsMFeature name="Server" dispOrder="0"/>-->
+
+                <!-- Folders -->
+                <vnsMFolder key="configuration" description="Configuration" cardinality="n" dispLabel="Configuration">
+                    <vnsMParam key="enabled" description="Enable or not the configuration (True/False)" dispLabel="Enable the configuration (True/False)" dType="str" mandatory="false" validation="isBoolean"/>
+<!--
+                    <vnsMFolder key="upstreamCfg"
+                            description="backend"
+                            dispLabel="backend"
+                            cardinality="n">
+                        <vnsMRel dispLabel="Select backend" key="upstreamRel">
+                            <vnsRsTarget tDn="uni/infra/mDev-lbaas-lbaas-0.1/mDevCfg/mFolder-upstream"/>
+                        </vnsMRel>
+                    </vnsMFolder>
+
+                    <vnsMFolder key="frontendServerCfg"
+                                description="Front-end server"
+                                dispLabel="Front-end server"
+                                cardinality="n">
+                        <vnsMRel dispLabel="Select front-end server" key="frontendServerRel">
+                            <vnsRsTarget tDn="uni/infra/mDev-lbaas-lbaas-0.1/mDevCfg/mFolder-frontendServer"/>
+                        </vnsMRel>
+                    </vnsMFolder>
+-->
+
+                </vnsMFolder>
+
+                <vnsMFolder key="management" cardinality="1" description="Configuration of the management link" dispLabel="Management interface">
+                    <vnsMParam key="https" dispLabel="HTTPS" description="HTTPS (true) or HTTP (false)" dType="str" mandatory="true" validation="isBoolean"/>
+                </vnsMFolder>
+
+            </vnsMFunc>
+
+        </vnsMDev>
+    </infraInfra>
+</polUni>
