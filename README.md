@@ -7,7 +7,7 @@ LBaas・・・・・・v1
 APIC・・・・・・ 1.2  
   
 # ●開発構成  
-  
+https://cloud.githubusercontent.com/assets/11345275/25370784/f99d2c8a-29c7-11e7-883c-529a9e6a0eab.png
 # ●使用方法  
 1.DevicePackageの設定  
 OpenstackLib\OpenstackLbaasConfig.pyの21行目からの下記の記述を構築したOpenstackの設定に合わせて記述します。  
