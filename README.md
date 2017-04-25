@@ -1,5 +1,5 @@
 # ●このプロジェクトについて  
-このプロジェクトは2016年度に取り組んだ「CiscoACIオープンソース デバイスパッケージ開発 プロジェクト」にて開発したACIからOpenstackのLbaasをコントロールするためのDevicePackageのサンプルコードです。  
+このプロジェクトは2016年度に取り組んだ「CiscoACIオープンソース デバイスパッケージ開発 プロジェクト」にて開発したACIからOpenstackのLbaasをコントロールするためのDevicePackageのサンプルコードです。  
   
 # ●動作環境(バージョン)  
 Openstack・・・・Liberty  
